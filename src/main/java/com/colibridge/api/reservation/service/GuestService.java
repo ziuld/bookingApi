@@ -12,11 +12,8 @@ import com.colibridge.api.reservation.common.ModelMapper;
 import com.colibridge.api.reservation.common.ReservationConstants;
 import com.colibridge.api.reservation.model.GuestDto;
 import com.colibridge.api.reservation.model.GuestEntity;
-import com.colibridge.api.reservation.model.ReservationDto;
-import com.colibridge.api.reservation.model.ReservationEntity;
 import com.colibridge.api.reservation.repository.GuestRepository;
 import com.colibridge.api.reservation.response.GuestResponseView;
-import com.colibridge.api.reservation.response.ReservationsResponseView;
 
 /**
  * <h2>GuestService</h2>
@@ -52,7 +49,7 @@ public class GuestService {
 			response.setHeader(header);
 		} catch (Exception e) {
 			header.setResult(ReservationConstants.FAILD);
-			ManageError error = new ManageError(ReservationConstants.ERROR_REPOSITORY_CODE,
+			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE,
 					ReservationConstants.ERROR_REPOSITORY_DETAILL);
 			response.setError(error);
 		}
@@ -76,7 +73,7 @@ public class GuestService {
 			response.setHeader(header);
 		} catch (Exception e) {
 			header.setResult(ReservationConstants.FAILD);
-			ManageError error = new ManageError(ReservationConstants.ERROR_REPOSITORY_CODE,
+			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE,
 					ReservationConstants.ERROR_REPOSITORY_DETAILL);
 			response.setError(error);
 		}

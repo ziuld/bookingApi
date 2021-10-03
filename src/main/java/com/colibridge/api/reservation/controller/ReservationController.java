@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.colibridge.api.reservation.common.ManageError;
 import com.colibridge.api.reservation.common.ManageHeader;
 import com.colibridge.api.reservation.common.ReservationConstants;
-import com.colibridge.api.reservation.model.ReservationEntity;
 import com.colibridge.api.reservation.response.CheckReservationResponseView;
 import com.colibridge.api.reservation.response.ReservationsResponseView;
 import com.colibridge.api.reservation.service.ReservationService;
@@ -37,7 +37,19 @@ public class ReservationController {
 	 */
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public ReservationsResponseView getAllReservation() {
-		return reservationService.getAllReservation();
+		ReservationsResponseView response = new ReservationsResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		try {
+			response = reservationService.getAllReservation();
+		} catch (Exception e) {
+			header.setResult(ReservationConstants.FAILD);
+			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE,
+					ReservationConstants.ERROR_REPOSITORY_DETAILL);
+			response.setError(error);
+		}
+
+		response.setHeader(header);
+		return response;
 	}
 
 	/**
@@ -45,8 +57,19 @@ public class ReservationController {
 	 * 
 	 * @return Iterable<ReservationEntity>
 	 */
-	@RequestMapping(value = "/reserve/{start}/{end}", method = RequestMethod.GET)
+	@RequestMapping(value = "/check/{start}/{end}", method = RequestMethod.GET)
 	public CheckReservationResponseView validate(@PathVariable String start, @PathVariable String end) {
-		return reservationService.checkReservationDates(start, end);
+		CheckReservationResponseView response = new CheckReservationResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		try {
+			response = reservationService.checkReservationDates(start, end);
+		} catch (Exception e) {
+			header = new ManageHeader(ReservationConstants.FAILD);
+			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
+			response.setError(error);
+			e.printStackTrace();
+		}
+		response.setHeader(header);
+		return response;
 	}
 }
