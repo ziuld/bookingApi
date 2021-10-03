@@ -7,6 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+* <h2>ReservationEntity</h2>
+* <p>Entity of reservation</p>
+*
+* @author  Luis Hernandez
+* @version 1.0
+* @since   2021-01-09
+*/
 @Entity
 @Table(name = "reservation")
 public class ReservationEntity {
