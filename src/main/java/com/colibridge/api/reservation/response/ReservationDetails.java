@@ -15,7 +15,6 @@ public class ReservationDetails {
 	private boolean available;
 	private String from;
 	private String to;
-	private String comment;
 
 	/**
 	 * default constructor
@@ -66,18 +65,5 @@ public class ReservationDetails {
 		this.to = to;
 	}
 
-	/**
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
-	}
-
-	/**
-	 * @param comment the comment to set
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
 
 }

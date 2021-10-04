@@ -47,21 +47,14 @@ public class GuestService {
 	 * 
 	 * @return GuestsResponseView
 	 */
-	public GuestsResponseView getAllGuests() {
+	public GuestsResponseView getAllGuests() throws Exception {
 		GuestsResponseView response = new GuestsResponseView();
 		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
-		try {
-			List<GuestEntity> result = guestRepository.findAll();
-			List<GuestDataResponseView> listDto = result.stream().map(entity -> modelMapper.toDto(entity))
-					.collect(Collectors.toList());
-			response.setData(listDto);
-			response.setHeader(header);
-		} catch (Exception e) {
-			header.setResult(ReservationConstants.FAILD);
-			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE,
-					ReservationConstants.ERROR_REPOSITORY_DETAILL);
-			response.setError(error);
-		}
+		List<GuestEntity> result = guestRepository.findAll();
+		List<GuestDataResponseView> listDto = result.stream().map(entity -> modelMapper.toDto(entity))
+				.collect(Collectors.toList());
+		response.setData(listDto);
+		response.setHeader(header);
 		return response;
 	}
 
@@ -71,7 +64,7 @@ public class GuestService {
 	 * @param name
 	 * @return GuestsResponseView
 	 */
-	public GuestsResponseView getGuestByNameContaining(String name) {
+	public GuestsResponseView getGuestByNameContaining(String name) throws Exception {
 		GuestsResponseView response = new GuestsResponseView();
 		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		response.setHeader(header);
@@ -88,7 +81,7 @@ public class GuestService {
 	 * @param request
 	 * @return GuestDetailResponseView
 	 */
-	public GuestDetailResponseView createGuest(GuestDetailRequestView request) {
+	public GuestDetailResponseView createGuest(GuestDetailRequestView request) throws Exception {
 		GuestDetailResponseView response = new GuestDetailResponseView();
 		GuestDataResponseView dataResponse = new GuestDataResponseView();
 		GuestEntity requestEntity = modelMapper.toEntity(request.getData());
@@ -104,7 +97,7 @@ public class GuestService {
 	 * @param id
 	 * @return GuestDetailResponseView
 	 */
-	public GuestDetailResponseView getGuestById(int id) {
+	public GuestDetailResponseView getGuestById(int id) throws Exception {
 		GuestDetailResponseView response = new GuestDetailResponseView();
 		GuestDataResponseView dataResponse = new GuestDataResponseView();
 		GuestEntity result = guestRepository.findById(id);

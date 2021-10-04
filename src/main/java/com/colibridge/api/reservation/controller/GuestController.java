@@ -47,7 +47,18 @@ public class GuestController {
 	 */
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public GuestsResponseView getAllGuests() {
-		return guestService.getAllGuests();
+		GuestsResponseView response = null;
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		try {
+			response = guestService.getAllGuests();
+		} catch (Exception e) {
+			header.setResult(ReservationConstants.FAILD);
+			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
+			response.setError(error);
+		}
+
+		response.setHeader(header);
+		return response;
 	}
 
 	/**
@@ -78,7 +89,18 @@ public class GuestController {
 	 */
 	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
 	public GuestsResponseView getGuestByNameContaining(@PathVariable String name) {
-		return guestService.getGuestByNameContaining(name);
+		GuestsResponseView response = new GuestsResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		try {
+			response = guestService.getGuestByNameContaining(name);
+		} catch (Exception e) {
+			header.setResult(ReservationConstants.FAILD);
+			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
+			response.setError(error);
+		}
+
+		response.setHeader(header);
+		return response;
 	}
 
 	/**

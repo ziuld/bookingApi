@@ -13,6 +13,7 @@ package com.colibridge.api.reservation.common;
 public class ManageHeader {
 	// ManageHeader parameters
 	private String result;
+	private String detail;
 
 	/**
 	 * default constructor
@@ -37,5 +38,19 @@ public class ManageHeader {
 	 */
 	public void setResult(String result) {
 		this.result = result;
+	}
+
+	/**
+	 * @return the detail
+	 */
+	public String getDetail() {
+		return detail;
+	}
+
+	/**
+	 * @param detail the detail to set
+	 */
+	public void setDetail(String detail) {
+		this.detail = detail;
 	}
 }

@@ -141,16 +141,15 @@ public class ReservationController {
 	public ReservationDetailResponseView createReservationForNewUser(
 			@RequestBody ReservationNewGuestDetailRequestView request) {
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
-		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		try {
 			response = reservationService.createReservationForNewUser(request);
 		} catch (Exception e) {
-			header = new ManageHeader(ReservationConstants.FAILD);
+			ManageHeader header = new ManageHeader(ReservationConstants.FAILD);
 			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
+			response.setHeader(header);
 			response.setError(error);
 			e.printStackTrace();
 		}
-		response.setHeader(header);
 		return response;
 	}
 
@@ -185,16 +184,15 @@ public class ReservationController {
 	@PutMapping(value = "/update")
 	public ReservationDetailResponseView deleteEmployee(@RequestBody ReservationUpdateDetailRequestView request) {
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
-		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		try {
 			response = reservationService.updateReservation(request);
 		} catch (Exception e) {
-			header = new ManageHeader(ReservationConstants.FAILD);
+			ManageHeader header = new ManageHeader(ReservationConstants.FAILD);
 			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
 			response.setError(error);
+			response.setHeader(header);
 			e.printStackTrace();
 		}
-		response.setHeader(header);
 		return response;
 	}
 }

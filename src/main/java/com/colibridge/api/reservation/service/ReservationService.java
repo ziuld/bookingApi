@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.colibridge.api.reservation.common.ManageHeader;
 import com.colibridge.api.reservation.common.ModelMapper;
 import com.colibridge.api.reservation.common.ReservationConstants;
 import com.colibridge.api.reservation.model.ReservationEntity;
@@ -82,23 +83,22 @@ public class ReservationService {
 		data.setTo(end);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String today = format.format(new Date());
-
-		if (!validateDates(start, end)) {
-			data.setAvailable(false);
-			data.setComment(ReservationConstants.MESSAGE_OUT_OF_RANGE);
-			response.setData(data);
-			return response;
+		ManageHeader header = validateDates(start, end);
+		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {		
+			response.setHeader(header);
 		} else {
 			result = reservationRepository
 					.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartDateIsAfter(end, start, today);
+			if (!result.isEmpty()) {
+				data.setAvailable(false);
+				header.setDetail(ReservationConstants.MESSAGE_FALSE + start + ReservationConstants.AND + end
+						+ ReservationConstants.DOT);
+				header.setResult(ReservationConstants.FAILD);
+			} else {
+				data.setAvailable(true);
+			}
 		}
-		if (!result.isEmpty()) {
-			data.setAvailable(false);
-			data.setComment(ReservationConstants.MESSAGE_FALSE + start + ReservationConstants.AND + end
-					+ ReservationConstants.DOT);
-		} else {
-			data.setComment(ReservationConstants.MESSAGE_TRUE);
-		}
+		response.setHeader(header);
 		response.setData(data);
 
 		return response;
@@ -124,26 +124,26 @@ public class ReservationService {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String today = format.format(new Date());
 		List<ReservationEntity> isAvaiable = null;
-
-		if (!validateDates(starDate, endDate)) {
-			dataResponse.setComment(ReservationConstants.MESSAGE_OUT_OF_RANGE);
-			response.setData(dataResponse);
-			return response;
+		ManageHeader header = validateDates(starDate, endDate);
+		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {		
+			response.setHeader(header);
 		} else {
 			isAvaiable = reservationRepository
 					.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartDateIsAfter(endDate, starDate,
 							today);
+			if (!isAvaiable.isEmpty()) {
+				header.setDetail(ReservationConstants.MESSAGE_FALSE + starDate + ReservationConstants.AND + endDate
+						+ ReservationConstants.DOT);
+				header.setResult(ReservationConstants.FAILD);
+			} else {
+				ReservationEntity reservationEntity = modelMapper.toEntity(data);
+				result = reservationRepository.save(reservationEntity);
+				dataResponse.setId(result.getId());
+				header.setDetail(ReservationConstants.BOOKING_OK);
+				response.setData(dataResponse);
+			}
 		}
-		if (!isAvaiable.isEmpty()) {
-			dataResponse.setComment(ReservationConstants.MESSAGE_FALSE + starDate + ReservationConstants.AND + endDate
-					+ ReservationConstants.DOT);
-		} else {
-			ReservationEntity reservationEntity = modelMapper.toEntity(data);
-			result = reservationRepository.save(reservationEntity);
-			dataResponse.setId(result.getId());
-			dataResponse.setComment(ReservationConstants.BOOKING_OK);
-		}
-		response.setData(dataResponse);
+		response.setHeader(header);
 		return response;
 	}
 
@@ -152,10 +152,11 @@ public class ReservationService {
 	 * 
 	 * @param start
 	 * @param end
-	 * @return boolean
+	 * @return ManageHeader
 	 * @throws Exception
 	 */
-	private boolean validateDates(String start, String end) throws Exception {
+	private ManageHeader validateDates(String start, String end) throws Exception {
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Instant date1 = null;
 		Instant date2 = null;
@@ -167,14 +168,17 @@ public class ReservationService {
 		long daysBetween = ChronoUnit.DAYS.between(date1, date2);
 
 		if (date1.compareTo(date2) > 0 && date1.isAfter(today.toInstant())) {
-			throw new Exception(ReservationConstants.INVALID_RANGE);
+			header.setDetail(ReservationConstants.INVALID_RANGE);
+			header.setResult(ReservationConstants.FAILD);
 		} else if (daysBetween > 2) {
-			return false;
+			header.setDetail(ReservationConstants.MESSAGE_OUT_OF_RANGE);
+			header.setResult(ReservationConstants.FAILD);
 		} else if (!(date1.isAfter(minLimitReservation) && date2.isBefore(maxLimitReservation))) {
-			return false;
+			header.setDetail(ReservationConstants.MESSAGE_OUT_OF_RANGE);
+			header.setResult(ReservationConstants.FAILD);
 		}
 
-		return true;
+		return header;
 	}
 
 	/**
@@ -188,44 +192,46 @@ public class ReservationService {
 			throws Exception {
 		// validate dates first
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
-		ReservationDataResponseView dataResponse = new ReservationDataResponseView();
 		ReservationDataRequestView requestData = modelMapper.toReservationData(request.getData());
 		String starDate = requestData.getFrom();
 		String endDate = requestData.getTo();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String today = format.format(new Date());
 		List<ReservationEntity> isAvaiable = null;
-
-		if (!validateDates(starDate, endDate)) {
-			dataResponse.setComment(ReservationConstants.MESSAGE_OUT_OF_RANGE);
-			response.setData(dataResponse);
-			return response;
+		ManageHeader header = validateDates(starDate, endDate);
+		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {			
+			response.setHeader(header);
 		} else {
 			isAvaiable = reservationRepository
 					.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartDateIsAfter(endDate, starDate,
 							today);
+			
+			if (!isAvaiable.isEmpty()) {
+				header.setDetail(ReservationConstants.MESSAGE_FALSE + starDate + ReservationConstants.AND + endDate
+						+ ReservationConstants.DOT);
+				header.setResult(ReservationConstants.FAILD);
+				response.setHeader(header);
+
+			} else {
+
+				// Guest registration
+				GuestDetailRequestView guestRequest = new GuestDetailRequestView();
+				GuestDataRequestView guestData = modelMapper.toGuestData(request.getData());
+				guestRequest.setData(guestData);
+				GuestDetailResponseView guestResult = guestService.createGuest(guestRequest);
+
+				// Reservation registration
+				ReservationEntity reservationEntity = modelMapper.toEntity(requestData);
+				reservationEntity.setGuestId(guestResult.getData().getId());
+
+				ReservationEntity result = reservationRepository.save(reservationEntity);
+				ReservationDataResponseView dataResponse = modelMapper.toDto(result);
+				response.setData(dataResponse);
+
+			}
 		}
-		if (!isAvaiable.isEmpty()) {
-			dataResponse.setComment(ReservationConstants.MESSAGE_FALSE + starDate + ReservationConstants.AND + endDate
-					+ ReservationConstants.DOT);
-		} else {
-
-			// Guest registration
-			GuestDetailRequestView guestRequest = new GuestDetailRequestView();
-			GuestDataRequestView guestData = modelMapper.toGuestData(request.getData());
-			guestRequest.setData(guestData);
-			GuestDetailResponseView guestResult = guestService.createGuest(guestRequest);
-
-			// Reservation registration
-			ReservationEntity reservationEntity = modelMapper.toEntity(requestData);
-			reservationEntity.setGuestId(guestResult.getData().getId());
-
-			ReservationEntity result = reservationRepository.save(reservationEntity);
-			dataResponse = modelMapper.toDto(result);
-			dataResponse.setComment(ReservationConstants.BOOKING_OK);
-
-		}
-		response.setData(dataResponse);
+		
+		response.setHeader(header);
 		return response;
 	}
 
@@ -257,16 +263,14 @@ public class ReservationService {
 	public ReservationDetailResponseView updateReservation(ReservationUpdateDetailRequestView request) throws Exception {
 		// validate dates first
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
-		ReservationDataResponseView dataResponse = new ReservationDataResponseView();
 		String starDate = request.getData().getFrom();
 		String endDate = request.getData().getTo();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String today = format.format(new Date());
 		List<ReservationEntity> isAvaiable = null;
-
-		if (!validateDates(starDate, endDate)) {
-			dataResponse.setComment(ReservationConstants.MESSAGE_OUT_OF_RANGE);
-			response.setData(dataResponse);
+		ManageHeader header = validateDates(starDate, endDate);
+		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {	
+			response.setHeader(header);
 			return response;
 		} else {
 			isAvaiable = reservationRepository
@@ -274,23 +278,26 @@ public class ReservationService {
 							today);
 		}
 		if (!isAvaiable.isEmpty()) {
-			dataResponse.setComment(ReservationConstants.MESSAGE_FALSE + starDate + ReservationConstants.AND + endDate
+			header.setDetail(ReservationConstants.MESSAGE_FALSE + starDate + ReservationConstants.AND + endDate
 					+ ReservationConstants.DOT);
+			header.setResult(ReservationConstants.FAILD);
 		} else {
 			ReservationEntity entity = modelMapper.toEntity(request.getData());
 			ReservationEntity result = reservationRepository.findById(entity.getId());
 			if (result == null) {
-				dataResponse.setComment(ReservationConstants.MESSAGE_RESERVATION_NO_EXIST);
+				header.setDetail(ReservationConstants.MESSAGE_RESERVATION_NO_EXIST);
+				header.setResult(ReservationConstants.FAILD);
 			} else if (result.getGuestId()!=entity.getGuestId()){
-				dataResponse.setComment(ReservationConstants.MESSAGE_GUEST_DFF);
+				header.setDetail(ReservationConstants.MESSAGE_GUEST_DFF);
+				header.setResult(ReservationConstants.FAILD);
 			}else {
 				ReservationEntity updated = reservationRepository.save(entity);
-				dataResponse = modelMapper.toDto(updated);
+				ReservationDataResponseView dataResponse = modelMapper.toDto(updated);
+				response.setData(dataResponse);
 			}
 			
 		}
-		
-		response.setData(dataResponse);
+		response.setHeader(header);
 		return response;
 	}
 
@@ -300,7 +307,7 @@ public class ReservationService {
 	 * @param id
 	 * @return ReservationDetailResponseView
 	 */
-	public ReservationDetailResponseView getReservationById(int id) {
+	public ReservationDetailResponseView getReservationById(int id) throws Exception {
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
 		ReservationDataResponseView dataResponse = new ReservationDataResponseView();
 		ReservationEntity result = reservationRepository.findById(id);
