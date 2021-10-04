@@ -1,61 +1,29 @@
-package com.colibridge.api.reservation.model;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+package com.colibridge.api.reservation.request;
 
 /**
- * <h2>GuestEntity</h2>
+ * <h2>GuestDataRequestView</h2>
  * <p>
- * Entity of guests
+ * Request of guest
  * </p>
  *
  * @author Luis Hernandez
  * @version 1.0
  * @since 2021-01-09
  */
-@Entity
-@Table(name = "guest")
-public class GuestEntity {
-	// GuestEntity parameters
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
-	private Integer id;
-
-	@Column(name = "first_name")
+public class GuestDataRequestView {
+	// GuestDataRequestView parameters
 	private String firstName;
-
-	@Column(name = "last_name")
 	private String lastName;
-
-	@Column(name = "email")
 	private String email;
-
-	@Column(name = "phone")
 	private String phone;
-
-	@Column(name = "address")
 	private String address;
-
-	@Column(name = "details")
-	private String details;
+	private String comment;
 
 	/**
-	 * @return the id
+	 * default constructor
 	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
+	public GuestDataRequestView() {
+		// default
 	}
 
 	/**
@@ -129,17 +97,16 @@ public class GuestEntity {
 	}
 
 	/**
-	 * @return the details
+	 * @return the comment
 	 */
-	public String getDetails() {
-		return details;
+	public String getComment() {
+		return comment;
 	}
 
 	/**
-	 * @param details the details to set
+	 * @param comment the comment to set
 	 */
-	public void setDetails(String details) {
-		this.details = details;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
-
 }

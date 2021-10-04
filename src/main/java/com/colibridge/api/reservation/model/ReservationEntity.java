@@ -7,17 +7,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * <h2>ReservationEntity</h2>
+ * <p>
+ * Entity of reservation
+ * </p>
+ *
+ * @author Luis Hernandez
+ * @version 1.0
+ * @since 2021-01-09
+ */
 @Entity
 @Table(name = "reservation")
 public class ReservationEntity {
-
+	// ReservationEntity parameters
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	private String id;
+	private Integer id;
 
 	@Column(name = "guest_id")
-	private String guestId;
+	private Integer guestId;
 
 	@Column(name = "start_date")
 	private String startDate;
@@ -37,28 +47,28 @@ public class ReservationEntity {
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
 	/**
 	 * @return the guestId
 	 */
-	public String getGuestId() {
+	public Integer getGuestId() {
 		return guestId;
 	}
 
 	/**
 	 * @param guestId the guestId to set
 	 */
-	public void setGuestId(String guestId) {
+	public void setGuestId(Integer guestId) {
 		this.guestId = guestId;
 	}
 
