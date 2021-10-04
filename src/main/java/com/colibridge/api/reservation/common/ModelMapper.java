@@ -39,13 +39,15 @@ public class ModelMapper {
 	 */
 	public GuestDataResponseView toDto(GuestEntity entity) {
 		GuestDataResponseView dto = new GuestDataResponseView();
-		dto.setId(entity.getId());
-		dto.setFirstName(entity.getFirstName());
-		dto.setLastName(entity.getLastName());
-		dto.setEmail(entity.getEmail());
-		dto.setPhone(entity.getPhone());
-		dto.setAddress(entity.getAddress());
-		dto.setComment(entity.getDetails());
+		if (entity != null) {
+			dto.setId(entity.getId());
+			dto.setFirstName(entity.getFirstName());
+			dto.setLastName(entity.getLastName());
+			dto.setEmail(entity.getEmail());
+			dto.setPhone(entity.getPhone());
+			dto.setAddress(entity.getAddress());
+			dto.setComment(entity.getDetails());
+		}
 		return dto;
 	}
 
@@ -57,11 +59,14 @@ public class ModelMapper {
 	 */
 	public GuestEntity toEntity(GuestDataResponseView dto) {
 		GuestEntity entity = new GuestEntity();
-		entity.setFirstName(dto.getFirstName());
-		entity.setLastName(dto.getLastName());
-		entity.setEmail(dto.getEmail());
-		entity.setAddress(dto.getAddress());
-		entity.setDetails(dto.getComment());
+		if (dto != null) {
+
+			entity.setFirstName(dto.getFirstName());
+			entity.setLastName(dto.getLastName());
+			entity.setEmail(dto.getEmail());
+			entity.setAddress(dto.getAddress());
+			entity.setDetails(dto.getComment());
+		}
 		return entity;
 	}
 
@@ -73,13 +78,16 @@ public class ModelMapper {
 	 */
 	public ReservationDataResponseView toDto(ReservationEntity entity) {
 		ReservationDataResponseView dto = new ReservationDataResponseView();
-		dto.setId(entity.getId());
-		dto.setGuestId(entity.getGuestId());
-		dto.setFrom(entity.getStartDate());
-		dto.setTo(entity.getEndDate());
-		dto.setComment(entity.getDetails());
-		dto.setCreated(entity.getTsCreated());
-		dto.setUpdated(entity.getTsUpdated());
+		if (entity != null) {
+
+			dto.setId(entity.getId());
+			dto.setGuestId(entity.getGuestId());
+			dto.setFrom(entity.getStartDate());
+			dto.setTo(entity.getEndDate());
+			dto.setComment(entity.getDetails());
+			dto.setCreated(entity.getTsCreated());
+			dto.setUpdated(entity.getTsUpdated());
+		}
 		return dto;
 	}
 
@@ -91,10 +99,13 @@ public class ModelMapper {
 	 */
 	public ReservationEntity toEntity(ReservationDataRequestView dto) {
 		ReservationEntity entity = new ReservationEntity();
-		entity.setGuestId(dto.getGuestId());
-		entity.setStartDate(dto.getFrom());
-		entity.setEndDate(dto.getTo());
-		entity.setDetails(dto.getComment());
+		if (dto != null) {
+
+			entity.setGuestId(dto.getGuestId());
+			entity.setStartDate(dto.getFrom());
+			entity.setEndDate(dto.getTo());
+			entity.setDetails(dto.getComment());
+		}
 		return entity;
 	}
 
@@ -106,11 +117,14 @@ public class ModelMapper {
 	 */
 	public ReservationEntity toEntity(ReservationDataResponseView dto) {
 		ReservationEntity entity = new ReservationEntity();
-		entity.setId(dto.getId());
-		entity.setGuestId(dto.getGuestId());
-		entity.setStartDate(dto.getFrom());
-		entity.setEndDate(dto.getTo());
-		entity.setDetails(dto.getComment());
+		if (dto != null) {
+
+			entity.setId(dto.getId());
+			entity.setGuestId(dto.getGuestId());
+			entity.setStartDate(dto.getFrom());
+			entity.setEndDate(dto.getTo());
+			entity.setDetails(dto.getComment());
+		}
 		return entity;
 	}
 
@@ -122,12 +136,15 @@ public class ModelMapper {
 	 */
 	public GuestEntity toEntity(GuestDataRequestView dto) {
 		GuestEntity entity = new GuestEntity();
-		entity.setFirstName(dto.getFirstName());
-		entity.setLastName(dto.getLastName());
-		entity.setEmail(dto.getEmail());
-		entity.setPhone(dto.getPhone());
-		entity.setAddress(dto.getAddress());
-		entity.setDetails(dto.getComment());
+		if (dto != null) {
+
+			entity.setFirstName(dto.getFirstName());
+			entity.setLastName(dto.getLastName());
+			entity.setEmail(dto.getEmail());
+			entity.setPhone(dto.getPhone());
+			entity.setAddress(dto.getAddress());
+			entity.setDetails(dto.getComment());
+		}
 		return entity;
 	}
 
@@ -139,11 +156,14 @@ public class ModelMapper {
 	 */
 	public GuestDataRequestView toGuestData(ReservationNewGuestDataRequestView data) {
 		GuestDataRequestView guest = new GuestDataRequestView();
-		guest.setFirstName(data.getFirstName());
-		guest.setLastName(data.getLastName());
-		guest.setEmail(data.getEmail());
-		guest.setPhone(data.getPhone());
-		guest.setAddress(data.getAddress());
+		if (data != null) {
+
+			guest.setFirstName(data.getFirstName());
+			guest.setLastName(data.getLastName());
+			guest.setEmail(data.getEmail());
+			guest.setPhone(data.getPhone());
+			guest.setAddress(data.getAddress());
+		}
 		return guest;
 	}
 
@@ -155,10 +175,12 @@ public class ModelMapper {
 	 */
 	public ReservationDataRequestView toReservationData(ReservationNewGuestDataRequestView data) {
 		ReservationDataRequestView reservation = new ReservationDataRequestView();
-		reservation.setGuestId(null);
-		reservation.setFrom(data.getFrom());
-		reservation.setTo(data.getTo());
-		reservation.setComment(data.getComment());
+		if (data != null) {
+			reservation.setGuestId(null);
+			reservation.setFrom(data.getFrom());
+			reservation.setTo(data.getTo());
+			reservation.setComment(data.getComment());
+		}
 		return reservation;
 	}
 
@@ -170,11 +192,14 @@ public class ModelMapper {
 	 */
 	public ReservationEntity toEntity(ReservationUpdateDataRequestView dto) {
 		ReservationEntity entity = new ReservationEntity();
-		entity.setId(dto.getId());
-		entity.setGuestId(dto.getGuestId());
-		entity.setStartDate(dto.getFrom());
-		entity.setEndDate(dto.getTo());
-		entity.setDetails(dto.getComment());
+		if (dto != null) {
+
+			entity.setId(dto.getId());
+			entity.setGuestId(dto.getGuestId());
+			entity.setStartDate(dto.getFrom());
+			entity.setEndDate(dto.getTo());
+			entity.setDetails(dto.getComment());
+		}
 		return entity;
 	}
 

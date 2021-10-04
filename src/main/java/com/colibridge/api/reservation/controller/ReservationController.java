@@ -97,16 +97,16 @@ public class ReservationController {
 	@RequestMapping(value = "/check/{start}/{end}", method = RequestMethod.GET)
 	public CheckReservationResponseView validate(@PathVariable String start, @PathVariable String end) {
 		CheckReservationResponseView response = new CheckReservationResponseView();
-		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		ManageHeader header;
 		try {
 			response = reservationService.checkReservationDates(start, end);
 		} catch (Exception e) {
 			header = new ManageHeader(ReservationConstants.FAILD);
 			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
+			response.setHeader(header);
 			response.setError(error);
 			e.printStackTrace();
 		}
-		response.setHeader(header);
 		return response;
 	}
 
@@ -119,16 +119,15 @@ public class ReservationController {
 	public ReservationDetailResponseView createReservationFromAnExistingUser(
 			@RequestBody ReservationDetailRequestView request) {
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
-		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		try {
 			response = reservationService.createReservationFromAnExistingUser(request);
 		} catch (Exception e) {
-			header = new ManageHeader(ReservationConstants.FAILD);
+			ManageHeader header = new ManageHeader(ReservationConstants.FAILD);
 			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
+			response.setHeader(header);
 			response.setError(error);
 			e.printStackTrace();
 		}
-		response.setHeader(header);
 		return response;
 	}
 
@@ -160,7 +159,7 @@ public class ReservationController {
 	 * @return ReservationDetailResponseView
 	 */
 	@DeleteMapping(value = "/delete/{id}")
-	public ReservationDetailResponseView deleteEmployee(@PathVariable int id) {
+	public ReservationDetailResponseView deleteReservation(@PathVariable int id) {
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
 		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		try {
@@ -182,7 +181,7 @@ public class ReservationController {
 	 * @return ReservationDetailResponseView
 	 */
 	@PutMapping(value = "/update")
-	public ReservationDetailResponseView deleteEmployee(@RequestBody ReservationUpdateDetailRequestView request) {
+	public ReservationDetailResponseView updateReservation(@RequestBody ReservationUpdateDetailRequestView request) {
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
 		try {
 			response = reservationService.updateReservation(request);

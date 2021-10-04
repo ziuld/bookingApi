@@ -1,5 +1,6 @@
 package com.colibridge.api.reservation.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -20,6 +21,7 @@ import com.colibridge.api.reservation.request.GuestDetailRequestView;
 import com.colibridge.api.reservation.request.ReservationDataRequestView;
 import com.colibridge.api.reservation.request.ReservationDetailRequestView;
 import com.colibridge.api.reservation.request.ReservationNewGuestDetailRequestView;
+import com.colibridge.api.reservation.request.ReservationUpdateDataRequestView;
 import com.colibridge.api.reservation.request.ReservationUpdateDetailRequestView;
 import com.colibridge.api.reservation.response.CheckReservationResponseView;
 import com.colibridge.api.reservation.response.GuestDetailResponseView;
@@ -47,13 +49,14 @@ public class ReservationService {
 	private ModelMapper modelMapper;
 	@Autowired
 	private GuestService guestService;
-	
+
 	/**
 	 * default constructor
 	 */
 	public ReservationService() {
 		// default
 	}
+
 	/**
 	 * Find all reservations.
 	 * 
@@ -77,14 +80,15 @@ public class ReservationService {
 	 */
 	public CheckReservationResponseView checkReservationDates(String start, String end) throws Exception {
 		CheckReservationResponseView response = new CheckReservationResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		List<ReservationEntity> result = null;
 		ReservationDetails data = new ReservationDetails();
 		data.setFrom(start);
 		data.setTo(end);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String today = format.format(new Date());
-		ManageHeader header = validateDates(start, end);
-		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {		
+		header = validateDates(start, end);
+		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {
 			response.setHeader(header);
 		} else {
 			result = reservationRepository
@@ -113,7 +117,14 @@ public class ReservationService {
 	public ReservationDetailResponseView createReservationFromAnExistingUser(ReservationDetailRequestView request)
 			throws Exception {
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		ReservationDataRequestView data = request.getData();
+		if (data == null) {
+			header.setDetail(ReservationConstants.INVALID_RANGE);
+			header.setResult(ReservationConstants.FAILD);
+			response.setHeader(header);
+			return response;
+		}
 		ReservationEntity result = new ReservationEntity();
 		ReservationDataResponseView dataResponse = new ReservationDataResponseView();
 		dataResponse.setGuestId(data.getGuestId());
@@ -124,8 +135,8 @@ public class ReservationService {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String today = format.format(new Date());
 		List<ReservationEntity> isAvaiable = null;
-		ManageHeader header = validateDates(starDate, endDate);
-		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {		
+		header = validateDates(starDate, endDate);
+		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {
 			response.setHeader(header);
 		} else {
 			isAvaiable = reservationRepository
@@ -163,18 +174,28 @@ public class ReservationService {
 		Date today = new Date();
 		Instant minLimitReservation = today.toInstant();
 		Instant maxLimitReservation = today.toInstant().plus(31, ChronoUnit.DAYS);
-		date1 = format.parse(start).toInstant();
-		date2 = format.parse(end).toInstant();
-		long daysBetween = ChronoUnit.DAYS.between(date1, date2);
-
-		if (date1.compareTo(date2) > 0 && date1.isAfter(today.toInstant())) {
+		if (start == null || end == null) {
 			header.setDetail(ReservationConstants.INVALID_RANGE);
 			header.setResult(ReservationConstants.FAILD);
-		} else if (daysBetween > 2) {
-			header.setDetail(ReservationConstants.MESSAGE_OUT_OF_RANGE);
-			header.setResult(ReservationConstants.FAILD);
-		} else if (!(date1.isAfter(minLimitReservation) && date2.isBefore(maxLimitReservation))) {
-			header.setDetail(ReservationConstants.MESSAGE_OUT_OF_RANGE);
+			return header;
+		}
+		try {
+			date1 = format.parse(start).toInstant();
+			date2 = format.parse(end).toInstant();
+			long daysBetween = ChronoUnit.DAYS.between(date1, date2);
+
+			if (date1.compareTo(date2) > 0 && date1.isAfter(today.toInstant())) {
+				header.setDetail(ReservationConstants.INVALID_RANGE);
+				header.setResult(ReservationConstants.FAILD);
+			} else if (daysBetween > 2) {
+				header.setDetail(ReservationConstants.MESSAGE_OUT_OF_RANGE);
+				header.setResult(ReservationConstants.FAILD);
+			} else if (!(date1.isAfter(minLimitReservation) && date2.isBefore(maxLimitReservation))) {
+				header.setDetail(ReservationConstants.MESSAGE_OUT_OF_RANGE);
+				header.setResult(ReservationConstants.FAILD);
+			}
+		} catch (ParseException pe) {
+			header.setDetail(ReservationConstants.INVALID_RANGE);
 			header.setResult(ReservationConstants.FAILD);
 		}
 
@@ -191,21 +212,28 @@ public class ReservationService {
 	public ReservationDetailResponseView createReservationForNewUser(ReservationNewGuestDetailRequestView request)
 			throws Exception {
 		// validate dates first
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
 		ReservationDataRequestView requestData = modelMapper.toReservationData(request.getData());
+		if (requestData == null || requestData.getFrom() == null || requestData.getTo() == null) {
+			header.setDetail(ReservationConstants.INVALID_RANGE);
+			header.setResult(ReservationConstants.FAILD);
+			response.setHeader(header);
+			return response;
+		}
 		String starDate = requestData.getFrom();
 		String endDate = requestData.getTo();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String today = format.format(new Date());
 		List<ReservationEntity> isAvaiable = null;
-		ManageHeader header = validateDates(starDate, endDate);
-		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {			
+		header = validateDates(starDate, endDate);
+		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {
 			response.setHeader(header);
 		} else {
 			isAvaiable = reservationRepository
 					.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartDateIsAfter(endDate, starDate,
 							today);
-			
+
 			if (!isAvaiable.isEmpty()) {
 				header.setDetail(ReservationConstants.MESSAGE_FALSE + starDate + ReservationConstants.AND + endDate
 						+ ReservationConstants.DOT);
@@ -230,7 +258,7 @@ public class ReservationService {
 
 			}
 		}
-		
+
 		response.setHeader(header);
 		return response;
 	}
@@ -260,16 +288,25 @@ public class ReservationService {
 	 * @return ReservationDetailResponseView
 	 * @throws Exception
 	 */
-	public ReservationDetailResponseView updateReservation(ReservationUpdateDetailRequestView request) throws Exception {
+	public ReservationDetailResponseView updateReservation(ReservationUpdateDetailRequestView request)
+			throws Exception {
 		// validate dates first
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		ReservationDetailResponseView response = new ReservationDetailResponseView();
-		String starDate = request.getData().getFrom();
-		String endDate = request.getData().getTo();
+		ReservationUpdateDataRequestView requestData = request.getData();
+		if (requestData == null || requestData.getFrom() == null || requestData.getTo() == null) {
+			header.setDetail(ReservationConstants.INVALID_RANGE);
+			header.setResult(ReservationConstants.FAILD);
+			response.setHeader(header);
+			return response;
+		}
+		String starDate = requestData.getFrom();
+		String endDate = requestData.getTo();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String today = format.format(new Date());
 		List<ReservationEntity> isAvaiable = null;
-		ManageHeader header = validateDates(starDate, endDate);
-		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {	
+		header = validateDates(starDate, endDate);
+		if (header.getResult().contentEquals(ReservationConstants.FAILD)) {
 			response.setHeader(header);
 			return response;
 		} else {
@@ -282,20 +319,20 @@ public class ReservationService {
 					+ ReservationConstants.DOT);
 			header.setResult(ReservationConstants.FAILD);
 		} else {
-			ReservationEntity entity = modelMapper.toEntity(request.getData());
+			ReservationEntity entity = modelMapper.toEntity(requestData);
 			ReservationEntity result = reservationRepository.findById(entity.getId());
 			if (result == null) {
 				header.setDetail(ReservationConstants.MESSAGE_RESERVATION_NO_EXIST);
 				header.setResult(ReservationConstants.FAILD);
-			} else if (result.getGuestId()!=entity.getGuestId()){
+			} else if (result.getGuestId() != entity.getGuestId()) {
 				header.setDetail(ReservationConstants.MESSAGE_GUEST_DFF);
 				header.setResult(ReservationConstants.FAILD);
-			}else {
+			} else {
 				ReservationEntity updated = reservationRepository.save(entity);
 				ReservationDataResponseView dataResponse = modelMapper.toDto(updated);
 				response.setData(dataResponse);
 			}
-			
+
 		}
 		response.setHeader(header);
 		return response;

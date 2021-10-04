@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.colibridge.api.reservation.common.ManageError;
 import com.colibridge.api.reservation.common.ManageHeader;
 import com.colibridge.api.reservation.common.ModelMapper;
 import com.colibridge.api.reservation.common.ReservationConstants;
@@ -83,6 +82,8 @@ public class GuestService {
 	 */
 	public GuestDetailResponseView createGuest(GuestDetailRequestView request) throws Exception {
 		GuestDetailResponseView response = new GuestDetailResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		response.setHeader(header);
 		GuestDataResponseView dataResponse = new GuestDataResponseView();
 		GuestEntity requestEntity = modelMapper.toEntity(request.getData());
 		GuestEntity result = guestRepository.save(requestEntity);
@@ -99,6 +100,8 @@ public class GuestService {
 	 */
 	public GuestDetailResponseView getGuestById(int id) throws Exception {
 		GuestDetailResponseView response = new GuestDetailResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		response.setHeader(header);
 		GuestDataResponseView dataResponse = new GuestDataResponseView();
 		GuestEntity result = guestRepository.findById(id);
 		dataResponse = modelMapper.toDto(result);
