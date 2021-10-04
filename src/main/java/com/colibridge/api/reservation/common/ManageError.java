@@ -11,11 +11,15 @@ package com.colibridge.api.reservation.common;
  * @since 2021-01-09
  */
 public class ManageError {
+	// ManageError parameters
 	private String code;
 	private String detail;
 
+	/**
+	 * default constructor
+	 */
 	public ManageError() {
-		// constructor base
+		// default
 	}
 
 	public ManageError(String code, String detail) {

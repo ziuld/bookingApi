@@ -19,15 +19,24 @@ import com.colibridge.api.reservation.model.ReservationEntity;
  */
 @Repository
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
-	
+
 	/**
 	 * Find matches between dates.
+	 * 
 	 * @param end
 	 * @param start
 	 * @return List<ReservationEntity>
 	 */
-	List<ReservationEntity> findAllByStartDateIsAfterOrEndDateIsBefore(String end, String start);
-	
-//	@Query(nativeQuery = true, value = "your sql query")
-//	ReservationEntity methodName(String arg1, String arg2);
+	List<ReservationEntity> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartDateIsAfter(String end,
+			String start, String today);
+
+	/**
+	 * Find a reservation.
+	 * 
+	 * @param end
+	 * @param start
+	 * @return List<ReservationEntity>
+	 */
+	ReservationEntity findById(int id);
+
 }

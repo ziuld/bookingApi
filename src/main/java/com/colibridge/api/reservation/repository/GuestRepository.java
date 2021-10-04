@@ -21,10 +21,20 @@ import com.colibridge.api.reservation.model.GuestEntity;
 public interface GuestRepository extends JpaRepository<GuestEntity, Long> {
 	/**
 	 * Find all Guests Containing the name.
+	 * 
 	 * @param name
 	 * @param name2
-	 * @return Iterable<ReservationEntity>
+	 * @return List<ReservationEntity>
 	 */
 	List<GuestEntity> findByFirstNameContainingOrLastNameContaining(String name, String name2);
+
+	/**
+	 * Find by Id Guest.
+	 * 
+	 * @param name
+	 * @param name2
+	 * @return GuestEntity<ReservationEntity>
+	 */
+	GuestEntity findById(int id);
 
 }

@@ -11,10 +11,14 @@ package com.colibridge.api.reservation.common;
  * @since 2021-01-09
  */
 public class ManageHeader {
+	// ManageHeader parameters
 	private String result;
 
+	/**
+	 * default constructor
+	 */
 	public ManageHeader() {
-		// constructor base
+		// default
 	}
 
 	public ManageHeader(String result) {

@@ -1,16 +1,19 @@
 package com.colibridge.api.reservation.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.colibridge.api.reservation.model.GuestDto;
-import com.colibridge.api.reservation.model.GuestEntity;
-import com.colibridge.api.reservation.response.GuestResponseView;
+import com.colibridge.api.reservation.common.ManageError;
+import com.colibridge.api.reservation.common.ManageHeader;
+import com.colibridge.api.reservation.common.ReservationConstants;
+import com.colibridge.api.reservation.request.GuestDetailRequestView;
+import com.colibridge.api.reservation.response.GuestDetailResponseView;
+import com.colibridge.api.reservation.response.GuestsResponseView;
 import com.colibridge.api.reservation.service.GuestService;
 
 /**
@@ -26,9 +29,16 @@ import com.colibridge.api.reservation.service.GuestService;
 @RestController
 @RequestMapping(path = "/guest")
 public class GuestController {
-
+	// GuestController parameters
 	@Autowired
 	private GuestService guestService;
+
+	/**
+	 * default constructor
+	 */
+	public GuestController() {
+		// default
+	}
 
 	/**
 	 * Find all guest.
@@ -36,18 +46,60 @@ public class GuestController {
 	 * @return GuestResponseView
 	 */
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	public GuestResponseView getAllGuests() {
+	public GuestsResponseView getAllGuests() {
 		return guestService.getAllGuests();
 	}
-	
+
+	/**
+	 * Find a guest.
+	 * 
+	 * @return GuestDetailResponseView
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public GuestDetailResponseView getGuest(@PathVariable int id) {
+		GuestDetailResponseView response = new GuestDetailResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		try {
+			response = guestService.getGuestById(id);
+		} catch (Exception e) {
+			header.setResult(ReservationConstants.FAILD);
+			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
+			response.setError(error);
+		}
+
+		response.setHeader(header);
+		return response;
+	}
+
 	/**
 	 * Find all Guests Containing the name.
 	 * 
 	 * @return GuestResponseView
 	 */
-	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
-	public GuestResponseView getGuestByNameContaining(@PathVariable String name) {
+	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
+	public GuestsResponseView getGuestByNameContaining(@PathVariable String name) {
 		return guestService.getGuestByNameContaining(name);
+	}
+
+	/**
+	 * Create reservation from an existing guest
+	 * 
+	 * @return ReservationDetailResponseView
+	 */
+	@PostMapping(value = "/create")
+	public GuestDetailResponseView createReservationFromAnExistingUser(@RequestBody GuestDetailRequestView request) {
+		GuestDetailResponseView response = new GuestDetailResponseView();
+		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
+		try {
+			response = guestService.createGuest(request);
+		} catch (Exception e) {
+			header = new ManageHeader(ReservationConstants.FAILD);
+			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
+			response.setError(error);
+			e.printStackTrace();
+		}
+		response.setHeader(header);
+		return response;
 	}
 
 }

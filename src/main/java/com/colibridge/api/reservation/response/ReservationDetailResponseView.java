@@ -3,37 +3,37 @@ package com.colibridge.api.reservation.response;
 import com.colibridge.api.reservation.common.BaseModel;
 
 /**
- * <h2>CheckReservationResponseView</h2>
+ * <h2>ReservationDetailsResponseView</h2>
  * <p>
- * Response if the date are valid
+ * Response a reservation detail
  * </p>
  *
  * @author Luis Hernandez
  * @version 1.0
  * @since 2021-01-09
  */
-public class CheckReservationResponseView extends BaseModel {
-	// CheckReservationResponseView parameters
-	private ReservationDetails data;
+public class ReservationDetailResponseView extends BaseModel {
+	// ReservationDetailResponseView parameters
+	private ReservationDataResponseView data;
 
 	/**
 	 * default constructor
 	 */
-	public CheckReservationResponseView() {
+	public ReservationDetailResponseView() {
 		// default
 	}
 
 	/**
 	 * @return the data
 	 */
-	public ReservationDetails getData() {
+	public ReservationDataResponseView getData() {
 		return data;
 	}
 
 	/**
 	 * @param data the data to set
 	 */
-	public void setData(ReservationDetails data) {
+	public void setData(ReservationDataResponseView data) {
 		this.data = data;
 	}
 

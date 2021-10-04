@@ -3,7 +3,6 @@ package com.colibridge.api.reservation.response;
 import java.util.List;
 
 import com.colibridge.api.reservation.common.BaseModel;
-import com.colibridge.api.reservation.model.GuestDto;
 
 /**
  * <h2>GuestResponseView</h2>
@@ -15,28 +14,28 @@ import com.colibridge.api.reservation.model.GuestDto;
  * @version 1.0
  * @since 2021-01-09
  */
-public class GuestResponseView extends BaseModel{
-
-	private List<GuestDto> data;
+public class GuestsResponseView extends BaseModel {
+	// GuestsResponseView parameters
+	private List<GuestDataResponseView> data;
 
 	/**
 	 * default constructor
 	 */
-	public GuestResponseView() {
+	public GuestsResponseView() {
 		// default
 	}
 
 	/**
 	 * @return the data
 	 */
-	public List<GuestDto> getData() {
+	public List<GuestDataResponseView> getData() {
 		return data;
 	}
 
 	/**
 	 * @param data the data to set
 	 */
-	public void setData(List<GuestDto> data) {
+	public void setData(List<GuestDataResponseView> data) {
 		this.data = data;
 	}
 

@@ -1,18 +1,19 @@
-package com.colibridge.api.reservation.response;
+package com.colibridge.api.reservation.request;
 
 /**
- * <h2>ReservationDetails</h2>
+ * <h2>ReservationUpdateDataRequestView</h2>
  * <p>
- * Response a reservation detail
+ * Request of update reservation
  * </p>
  *
  * @author Luis Hernandez
  * @version 1.0
  * @since 2021-01-09
  */
-public class ReservationDetails {
-	// ReservationDetails parameters
-	private boolean available;
+public class ReservationUpdateDataRequestView {
+	// ReservationUpdateDataRequestView parametes
+	private Integer id;
+	private Integer guestId;
 	private String from;
 	private String to;
 	private String comment;
@@ -20,22 +21,36 @@ public class ReservationDetails {
 	/**
 	 * default constructor
 	 */
-	public ReservationDetails() {
+	public ReservationUpdateDataRequestView() {
 		// default
 	}
 
 	/**
-	 * @return the available
+	 * @return the id
 	 */
-	public boolean getAvailable() {
-		return available;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
-	 * @param available the available to set
+	 * @param id the id to set
 	 */
-	public void setAvailable(boolean available) {
-		this.available = available;
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the guestId
+	 */
+	public Integer getGuestId() {
+		return guestId;
+	}
+
+	/**
+	 * @param guestId the guestId to set
+	 */
+	public void setGuestId(Integer guestId) {
+		this.guestId = guestId;
 	}
 
 	/**
@@ -79,5 +94,4 @@ public class ReservationDetails {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
 }
