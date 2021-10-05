@@ -35,12 +35,6 @@ public class ReservationEntity {
 	@Column(name = "end_date")
 	private String endDate;
 
-	@Column(name = "ts_created")
-	private String tsCreated;
-
-	@Column(name = "ts_updated")
-	private String tsUpdated;
-
 	@Column(name = "details")
 	private String details;
 
@@ -98,34 +92,6 @@ public class ReservationEntity {
 	 */
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
-	}
-
-	/**
-	 * @return the tsCreated
-	 */
-	public String getTsCreated() {
-		return tsCreated;
-	}
-
-	/**
-	 * @param tsCreated the tsCreated to set
-	 */
-	public void setTsCreated(String tsCreated) {
-		this.tsCreated = tsCreated;
-	}
-
-	/**
-	 * @return the tsUpdated
-	 */
-	public String getTsUpdated() {
-		return tsUpdated;
-	}
-
-	/**
-	 * @param tsUpdated the tsUpdated to set
-	 */
-	public void setTsUpdated(String tsUpdated) {
-		this.tsUpdated = tsUpdated;
 	}
 
 	/**

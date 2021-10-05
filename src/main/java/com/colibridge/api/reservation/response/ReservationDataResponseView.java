@@ -17,8 +17,6 @@ public class ReservationDataResponseView {
 	private String from;
 	private String to;
 	private String comment;
-	private String created;
-	private String updated;
 
 	/**
 	 * default constructor
@@ -97,31 +95,4 @@ public class ReservationDataResponseView {
 		this.comment = comment;
 	}
 
-	/**
-	 * @return the updated
-	 */
-	public String getUpdated() {
-		return updated;
-	}
-
-	/**
-	 * @param updated the updated to set
-	 */
-	public void setUpdated(String updated) {
-		this.updated = updated;
-	}
-
-	/**
-	 * @return the created
-	 */
-	public String getCreated() {
-		return created;
-	}
-
-	/**
-	 * @param created the created to set
-	 */
-	public void setCreated(String created) {
-		this.created = created;
-	}
 }

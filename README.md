@@ -128,18 +128,14 @@ The REST API is part of a test an the app is described below.
                 "guestId": 18,
                 "from": "2021-11-03",
                 "to": "2021-11-03",
-                "comment": "",
-                "created": "2021-10-03 21:49:48",
-                "updated": "2021-10-03 21:49:48"
+                "comment": ""
             },
             {
                 "id": 12,
                 "guestId": 0,
                 "from": "2021-10-14",
                 "to": "2021-10-14",
-                "comment": "",
-                "created": "2021-10-03 14:11:02",
-                "updated": "2021-10-03 14:11:02"
+                "comment": ""
             }
         ]
     }
@@ -196,9 +192,7 @@ The REST API is part of a test an the app is described below.
         "guestId": 18,
         "from": "2021-11-03",
         "to": "2021-11-03",
-        "comment": "",
-        "created": "2021-10-03 21:49:48",
-        "updated": "2021-10-03 21:49:48"
+        "comment": ""
         }
     }
 
@@ -280,9 +274,7 @@ The REST API is part of a test an the app is described below.
         "guestId": 0,
         "from": "2021-10-27",
         "to": "2021-10-27",
-        "comment": null,
-        "created": null,
-        "updated": null
+        "comment": null
         }
     }
 
@@ -325,9 +317,7 @@ The REST API is part of a test an the app is described below.
         "guestId": 38,
         "from": "2021-11-01",
         "to": "2021-11-01",
-        "comment": "i hope so",
-        "created": null,
-        "updated": null
+        "comment": "i hope so"
         }
     }
 
@@ -367,9 +357,7 @@ The REST API is part of a test an the app is described below.
         "guestId": 18,
         "from": "2021-11-02",
         "to": "2021-11-02",
-        "comment": "",
-        "created": null,
-        "updated": null
+        "comment": ""
         }
     }
 
@@ -398,9 +386,7 @@ The REST API is part of a test an the app is described below.
         "guestId": null,
         "from": null,
         "to": null,
-        "comment": null,
-        "created": null,
-        "updated": null
+        "comment": null
         }
     }
     
