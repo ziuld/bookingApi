@@ -79,14 +79,11 @@ public class ModelMapper {
 	public ReservationDataResponseView toDto(ReservationEntity entity) {
 		ReservationDataResponseView dto = new ReservationDataResponseView();
 		if (entity != null) {
-
 			dto.setId(entity.getId());
 			dto.setGuestId(entity.getGuestId());
 			dto.setFrom(entity.getStartDate());
 			dto.setTo(entity.getEndDate());
 			dto.setComment(entity.getDetails());
-			dto.setCreated(entity.getTsCreated());
-			dto.setUpdated(entity.getTsUpdated());
 		}
 		return dto;
 	}
