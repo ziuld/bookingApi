@@ -2,7 +2,7 @@
 
 ## Install and Run
 
- ./gradlew bootRun
+ 	`./gradlew bootRun`
 
 ## dependencies
 
@@ -403,3 +403,59 @@ The REST API is part of a test an the app is described below.
         "updated": null
         }
     }
+    
+# DATA BASE
+
+### Table structure for the table `guest`
+
+    CREATE TABLE `guest` (
+    `id` int(11) NOT NULL,
+    `first_name` varchar(128) NOT NULL,
+    `last_name` varchar(128) NOT NULL,
+    `email` varchar(255) NOT NULL,
+    `phone` varchar(255) DEFAULT NULL,
+    `address` varchar(255) DEFAULT NULL,
+    `details` text DEFAULT NULL,
+    `firt_name` varchar(255) DEFAULT NULL,
+    `second_name` varchar(255) DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+### Table structure for the table `reservation`
+
+    CREATE TABLE `reservation` (
+    `id` int(11) NOT NULL,
+    `guest_id` int(11) NOT NULL,
+    `start_date` date NOT NULL,
+    `end_date` date NOT NULL,
+    `ts_created` timestamp NOT NULL DEFAULT current_timestamp(),
+    `ts_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+    `details` text DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+### Indexs
+
+    ALTER TABLE `guest`
+    ADD PRIMARY KEY (`id`);
+
+    --
+    -- Index table `guest_view`
+    --
+    ALTER TABLE `guest_view`
+    ADD PRIMARY KEY (`id`);
+
+    --
+    -- Index table `reservation`
+    --
+    ALTER TABLE `reservation`
+    ADD PRIMARY KEY (`id`);
+
+    COMMIT;
+
+
+### Application.properties configuration
+
+    spring.jpa.hibernate.ddl-auto=update
+    spring.datasource.url=jdbc:mysql://localhost:3306/{db_name}
+    spring.datasource.username={USER}
+    spring.datasource.password={PASSWORD}
+    spring.datasource.driver-class-name =com.mysql.jdbc.Driver
