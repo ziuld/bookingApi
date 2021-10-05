@@ -7,17 +7,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * <h2>ReservationEntity</h2>
+ * <p>
+ * Entity of reservation
+ * </p>
+ *
+ * @author Luis Hernandez
+ * @version 1.0
+ * @since 2021-01-09
+ */
 @Entity
 @Table(name = "reservation")
 public class ReservationEntity {
-
+	// ReservationEntity parameters
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	private String id;
+	private Integer id;
 
 	@Column(name = "guest_id")
-	private String guestId;
+	private Integer guestId;
 
 	@Column(name = "start_date")
 	private String startDate;
@@ -25,40 +35,34 @@ public class ReservationEntity {
 	@Column(name = "end_date")
 	private String endDate;
 
-	@Column(name = "ts_created")
-	private String tsCreated;
-
-	@Column(name = "ts_updated")
-	private String tsUpdated;
-
 	@Column(name = "details")
 	private String details;
 
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
 	/**
 	 * @return the guestId
 	 */
-	public String getGuestId() {
+	public Integer getGuestId() {
 		return guestId;
 	}
 
 	/**
 	 * @param guestId the guestId to set
 	 */
-	public void setGuestId(String guestId) {
+	public void setGuestId(Integer guestId) {
 		this.guestId = guestId;
 	}
 
@@ -88,34 +92,6 @@ public class ReservationEntity {
 	 */
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
-	}
-
-	/**
-	 * @return the tsCreated
-	 */
-	public String getTsCreated() {
-		return tsCreated;
-	}
-
-	/**
-	 * @param tsCreated the tsCreated to set
-	 */
-	public void setTsCreated(String tsCreated) {
-		this.tsCreated = tsCreated;
-	}
-
-	/**
-	 * @return the tsUpdated
-	 */
-	public String getTsUpdated() {
-		return tsUpdated;
-	}
-
-	/**
-	 * @param tsUpdated the tsUpdated to set
-	 */
-	public void setTsUpdated(String tsUpdated) {
-		this.tsUpdated = tsUpdated;
 	}
 
 	/**
