@@ -247,15 +247,20 @@ public class ReservationService {
 				GuestDataRequestView guestData = modelMapper.toGuestData(request.getData());
 				guestRequest.setData(guestData);
 				GuestDetailResponseView guestResult = guestService.createGuest(guestRequest);
+				if(guestResult.getHeader().getResult().equals(ReservationConstants.FAILD)) {
+					header.setDetail(guestResult.getHeader().getDetail());
+					header.setResult(ReservationConstants.FAILD);
+					response.setHeader(header);
+				}else {
+					// Reservation registration
+					ReservationEntity reservationEntity = modelMapper.toEntity(requestData);
+					reservationEntity.setGuestId(guestResult.getData().getId());
 
-				// Reservation registration
-				ReservationEntity reservationEntity = modelMapper.toEntity(requestData);
-				reservationEntity.setGuestId(guestResult.getData().getId());
-
-				ReservationEntity result = reservationRepository.save(reservationEntity);
-				ReservationDataResponseView dataResponse = modelMapper.toDto(result);
-				response.setData(dataResponse);
-
+					ReservationEntity result = reservationRepository.save(reservationEntity);
+					ReservationDataResponseView dataResponse = modelMapper.toDto(result);
+					response.setData(dataResponse);
+				}
+				
 			}
 		}
 
