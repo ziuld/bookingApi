@@ -111,16 +111,15 @@ public class GuestController {
 	@PostMapping(value = "/create")
 	public GuestDetailResponseView createReservationFromAnExistingUser(@RequestBody GuestDetailRequestView request) {
 		GuestDetailResponseView response = new GuestDetailResponseView();
-		ManageHeader header = new ManageHeader(ReservationConstants.SUCCESS);
 		try {
 			response = guestService.createGuest(request);
 		} catch (Exception e) {
-			header = new ManageHeader(ReservationConstants.FAILD);
+			ManageHeader header = new ManageHeader(ReservationConstants.FAILD);
 			ManageError error = new ManageError(ReservationConstants.GENERAL_ERROR_CODE, e.getMessage());
 			response.setError(error);
+			response.setHeader(header);
 			e.printStackTrace();
 		}
-		response.setHeader(header);
 		return response;
 	}
 

@@ -86,9 +86,17 @@ public class GuestService {
 		response.setHeader(header);
 		GuestDataResponseView dataResponse = new GuestDataResponseView();
 		GuestEntity requestEntity = modelMapper.toEntity(request.getData());
-		GuestEntity result = guestRepository.save(requestEntity);
-		dataResponse = modelMapper.toDto(result);
-		response.setData(dataResponse);
+		List<GuestEntity> exist = guestRepository.findByFirstNameAndLastName(requestEntity.getFirstName(),requestEntity.getLastName());
+		if(exist.isEmpty()) {
+			GuestEntity result = guestRepository.save(requestEntity);
+			dataResponse = modelMapper.toDto(result);
+			response.setData(dataResponse);
+		}else {
+			header.setResult(ReservationConstants.FAILD);
+			header.setDetail(ReservationConstants.MESSAGE_GUEST_EXIST);
+			response.setHeader(header);
+		}
+		
 		return response;
 	}
 
