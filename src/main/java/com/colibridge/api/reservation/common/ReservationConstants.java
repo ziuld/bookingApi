@@ -20,7 +20,7 @@ public class ReservationConstants {
 
 	// General constants
 	public static final String SUCCESS = "SUCCESS";
-	public static final String FAILD = "FAILD";
+	public static final String FAILD = "FAILED";
 	public static final String ERROR_REPOSITORY_DETAILL = "reservationRepositoryError";
 	public static final String ERROR_CRONTROLLER = "GuestController.getGuest";
 	public static final String GENERAL_ERROR_CODE = "01";
