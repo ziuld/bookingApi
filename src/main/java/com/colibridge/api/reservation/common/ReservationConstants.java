@@ -32,6 +32,7 @@ public class ReservationConstants {
 	public static final String INVALID_RANGE = "The date range is invalid";
 	public static final String BOOKING_OK = "You are booked already.";
 	public static final String MESSAGE_GUEST_DFF = "You can't change Guest.";
-	public static final String MESSAGE_RESERVATION_NO_EXIST = "Reservation do not existe.";
+	public static final String MESSAGE_RESERVATION_NO_EXIST = "The reservation does not exist.";
+	public static final String MESSAGE_GUEST_EXIST = "The guest already exists.";
 
 }

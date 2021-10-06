@@ -31,10 +31,18 @@ public interface GuestRepository extends JpaRepository<GuestEntity, Long> {
 	/**
 	 * Find by Id Guest.
 	 * 
-	 * @param name
-	 * @param name2
+	 * @param id
 	 * @return GuestEntity<ReservationEntity>
 	 */
 	GuestEntity findById(int id);
+	
+	/**
+	 * Find by name and last name.
+	 * 
+	 * @param name
+	 * @param name2
+	 * @return List GuestEntity<ReservationEntity>
+	 */
+	List<GuestEntity> findByFirstNameAndLastName(String firstName, String lastName);
 
 }
