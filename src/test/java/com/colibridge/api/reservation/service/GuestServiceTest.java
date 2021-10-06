@@ -64,7 +64,9 @@ public class GuestServiceTest {
 	
 	@Test
 	void createGuestTest() throws Exception {
-		when(guestRepository.save(null)).thenReturn(guestEntity);
+		when(modelMapper.toEntity(guestDetailRequestView.getData())).thenReturn(guestEntity);
+		when(guestRepository.findByFirstNameAndLastName(null, null)).thenReturn(listEntity);
+		when(guestRepository.save(guestEntity)).thenReturn(guestEntity);
 		GuestDetailResponseView result = guestService.createGuest(guestDetailRequestView);
 		assertEquals(result.getHeader().getResult(), ReservationConstants.SUCCESS);
 	}
